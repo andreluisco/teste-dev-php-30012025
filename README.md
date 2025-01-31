@@ -52,3 +52,31 @@ O objetivo deste teste é desenvolver uma API Rest para o cadastro de fornecedor
 - Depois de finalizado, envie-nos o pull request;
 
 
+## Organização do Projeto
+
+```
+Src/
+│
+├── User/  # Nome do Módulo
+│   ├── Application/
+│   │   ├── Providers/
+│   │   │   └── UserServiceProvider.php
+│   ├── Domain/
+│   │   └── Contracts/
+│   │       └── Repositories/
+│   │           └── UserRepository.php  # Interface do Repositorio
+│   ├── Infrastructure/
+│   │   └── Eloquent/
+│   │       ├── Models/
+│   │       │   └── UserEloquentModel.php  # Eloquent Model
+│   │       └── Repositories/
+│   │           └── UserEloquentRepository.php  # Implementação do Repositório no Eloquent
+│   └── Presentation/
+│       └── Api/
+│           ├── Controllers/
+│           ├── Requests/
+│           ├── Resources/
+│           └── routes.php
+```
+
+
