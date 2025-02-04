@@ -3,6 +3,7 @@
 namespace Src\Empresas\Application\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Src\Empresas\Domain\Contracts\Repositories\CnpjImportRepository;
 use Src\Empresas\Domain\Contracts\Repositories\EmpresaRepository;
 use Src\Empresas\Infrastructure\Eloquent\Models\EmpresaCnpjImportLogEloquentModel;
@@ -37,20 +38,23 @@ class EmpresaCnpjImportService
      */
     public function importEmpresaByCnpj(string $cnpj)
     {
+        Log::info("Iniciando importação para CNPJ: {$cnpj}");
         // Verifica se a empresa já existe
         $empresa = $this->empresaRepository->findByCnpj($cnpj);
 
         if ($empresa) {
+            Log::info("Empresa já existe no sistema para CNPJ: {$cnpj}");
             return $empresa;
         }
 
         // Cria ou atualiza o log de importação
+        Log::info("Criando/atualizando log de importação para CNPJ: {$cnpj}");
         $log = $this->cnpjImportRepository->findOrCreateLog($cnpj);
         $this->cnpjImportRepository->incrementAttempts($log);
 
         // Se já atingiu mais de 5 tentativas, interrompe
         if ($log->attempts > $this->maxAttempts) {
-
+            Log::warning("Número máximo de tentativas atingido para CNPJ: {$cnpj}");
             $this->cnpjImportRepository->markAsFailed($log, 'Número máximo de tentativas atingido');
             return false;
         }
@@ -61,11 +65,12 @@ class EmpresaCnpjImportService
         );
 
         if ($response->failed()) {
-
+            Log::error("Falha na requisição à BrasilAPI para CNPJ: {$cnpj}. Resposta: " . $response->body());
             $this->cnpjImportRepository->markAsFailed($log, $response->body());
             return false;
         }
 
+        Log::info("Dados recebidos da BrasilAPI para CNPJ: {$cnpj}");
         return $this->createEmpresaFromApiResponse($log, $response->json());
     }
 
@@ -74,6 +79,8 @@ class EmpresaCnpjImportService
         array $data
     ): EmpresaEloquentModel|bool {
         try {
+            Log::info("Criando empresa no banco de dados para CNPJ: {$data['cnpj']}");
+
             $empresa = $this->empresaRepository->create([
                 'cnpj'                  => $data['cnpj'],
                 'razao_social'          => $data['razao_social'],
@@ -83,11 +90,13 @@ class EmpresaCnpjImportService
                 'porte'                 => $data['descricao_porte']
             ]);
 
+            Log::info("Empresa criada com sucesso para CNPJ: {$data['cnpj']}");
             $this->cnpjImportRepository->markAsSuccess($log);
             return $empresa;
 
         }
         catch (\Exception $e) {
+            Log::error("Erro ao criar empresa para CNPJ: {$data['cnpj']}. Erro: " . $e->getMessage());
             $this->cnpjImportRepository->markAsFailed($log, $e->getMessage());
             return false;
         }

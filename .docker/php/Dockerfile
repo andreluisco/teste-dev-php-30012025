@@ -5,12 +5,17 @@ COPY docker.conf /usr/local/etc/php-fpm.d/docker.conf
 COPY .bashrc /root/
 
 RUN apt-get update \
-  && apt-get install -y build-essential zlib1g-dev default-mysql-client curl gnupg procps vim git unzip libzip-dev libpq-dev \
-  && docker-php-ext-install zip pdo_mysql pdo_pgsql pgsql
+  && apt-get install -y build-essential zlib1g-dev default-mysql-client curl gnupg procps vim git unzip libzip-dev libpq-dev supervisor \
+  && docker-php-ext-install zip pdo_mysql pdo_pgsql pgsql \
+  && mkdir -p /etc/supervisor/conf.d
 
 RUN apt-get install -y libicu-dev \
 && docker-php-ext-configure intl \
 && docker-php-ext-install intl
+
+# Copy Supervisor configuration file
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY laravel-queue.conf /etc/supervisor/conf.d/laravel-queue.conf
 
 # pcov
 RUN pecl install pcov && docker-php-ext-enable pcov
@@ -42,3 +47,9 @@ WORKDIR /root
 
 EXPOSE 5173
 WORKDIR /var/www
+
+
+# Ensure Supervisor runs as a service in the container
+#CMD ["sh", "-c", "service supervisor start && php-fpm"]
+#CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["sh", "-c", "php-fpm -D && supervisord -c /etc/supervisor/supervisord.conf"]

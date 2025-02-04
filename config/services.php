@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'brasilapi' => [
+        'cnpj' => env('BRASILAPI_CNPJ', 'https://brasilapi.com.br/api/cnpj/v1'),
+    ],
+
 ];

@@ -29,6 +29,7 @@ return array(
     '47e1160838b5e5a10346ac4084b58c23' => $vendorDir . '/laravel/prompts/src/helpers.php',
     'f83ed111c2f97a0449abf067f157f418' => $vendorDir . '/pestphp/pest/src/Functions.php',
     '7d2876738dc0328edeb8a103c76cd8e7' => $vendorDir . '/pestphp/pest/src/Pest.php',
+    'decc78cc4436b1292c6c0d151b19445c' => $vendorDir . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
     'e39a8b23c42d4e1452234d762b03835a' => $vendorDir . '/ramsey/uuid/src/functions.php',
     '476ca15b8d69b04665cd879be9cb4c68' => $vendorDir . '/laravel/framework/src/Illuminate/Collections/functions.php',
     '265b4faa2b3a9766332744949e83bf97' => $vendorDir . '/laravel/framework/src/Illuminate/Collections/helpers.php',

@@ -15,7 +15,7 @@ use Src\Empresas\Application\Services\EmpresaCnpjImportService;
  * Job responsável por buscar os dados de uma empresa via CNPJ
  * utilizando a BrasilAPI e salvar as informações no sistema.
  *
- * O job será enviado para a fila (RabbitMQ, por exemplo) e tentará executar
+ * O job será enviado para a fila do RabbitMQ e tentará executar
  * até 5 vezes caso ocorra alguma falha.
  */
 class BuscarEmpresaCnpjJob implements ShouldQueue
@@ -44,6 +44,7 @@ class BuscarEmpresaCnpjJob implements ShouldQueue
     public function __construct(string $cnpj)
     {
         $this->cnpj = $cnpj;
+        Log::info("CNPJ registrado para busca: {$this->cnpj}");
     }
 
     /**
@@ -60,10 +61,13 @@ class BuscarEmpresaCnpjJob implements ShouldQueue
      */
     public function handle(EmpresaCnpjImportService $importService): void
     {
+        Log::info("Executando job para CNPJ: {$this->cnpj}");
+
         $result = $importService->importEmpresaByCnpj($this->cnpj);
 
         if (!$result) {
             // Lança exceção para acionar a lógica de retry do Laravel.
+            Log::error("Falha ao importar empresa para CNPJ: {$this->cnpj}");
             throw new Exception("Falha ao importar a empresa com CNPJ: {$this->cnpj}");
         }
 

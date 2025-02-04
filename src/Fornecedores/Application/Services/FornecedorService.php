@@ -2,21 +2,38 @@
 
 namespace Src\Fornecedores\Application\Services;
 
+use LaravelLegends\PtBrValidator\Rules\Cnpj;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Src\Empresas\Application\Jobs\BuscarEmpresaCnpjJob;
+use Src\Empresas\Domain\Contracts\Repositories\EmpresaRepository;
 use Src\Fornecedores\Domain\Contracts\Repositories\FornecedorRepository;
 use Src\Fornecedores\Infrastructure\Eloquent\Models\FornecedorEloquentModel;
 
 class FornecedorService
 {
     protected FornecedorRepository $repository;
+    protected EmpresaRepository $empresaRepository;
 
-    public function __construct(FornecedorRepository $repository)
+    public function __construct(FornecedorRepository $repository, EmpresaRepository $empresaRepository)
     {
         $this->repository = $repository;
+        $this->empresaRepository = $empresaRepository;
     }
 
     public function createFornecedor(array $data): FornecedorEloquentModel
     {
+        // Verifica se o documento informado é um CNPJ válido
+        $cnpjRule = new Cnpj;
+        if ($cnpjRule->passes('documento_numero', $data['documento_numero'])) {
+            // Se for um CNPJ válido, busca a empresa associada
+            $empresa = $this->empresaRepository->findByCnpj($data['documento_numero']);
+            if (!$empresa) {
+                // Se a empresa não existe, despacha o job para buscar os dados da empresa
+                BuscarEmpresaCnpjJob::dispatch($data['documento_numero']);
+            }
+        }
+
+        // Cria o registro do fornecedor normalmente
         return $this->repository->create($data);
     }
 
