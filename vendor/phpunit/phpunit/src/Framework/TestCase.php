@@ -1794,7 +1794,7 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
                     'This test depends on a test that is larger than itself',
                 );
 
-                return true;
+                return false;
             }
 
             $returnValue = $passedTests->returnValue($dependencyTarget);

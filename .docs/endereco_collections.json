@@ -1,0 +1,65 @@
+{
+    "info": {
+        "_postman_id": "e2c3f0a9-1234-4a1f-9e37-abcdef123456",
+        "name": "Endereco API",
+        "description": "Coleção com endpoints para listar os estados e criar um novo endereço.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Listar Estados",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/enderecos/estados",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "enderecos",
+                        "estados"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Criar Endereço",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"cep\": \"12345-678\",\n  \"estado_id\": 1,\n  \"cidade\": \"São Paulo\",\n  \"bairro\": \"Centro\",\n  \"logradouro\": \"Av. Paulista\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/enderecos",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "enderecos"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

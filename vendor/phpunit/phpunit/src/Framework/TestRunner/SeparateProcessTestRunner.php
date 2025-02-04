@@ -248,6 +248,10 @@ final class SeparateProcessTestRunner implements IsolatedTestRunner
         }
 
         if ($childResult !== false) {
+            if (!empty($childResult['output'])) {
+                $output = $childResult['output'];
+            }
+
             Facade::instance()->forward($childResult['events']);
             PassedTests::instance()->import($childResult['passedTests']);
 
@@ -261,6 +265,10 @@ final class SeparateProcessTestRunner implements IsolatedTestRunner
                     $childResult['codeCoverage'],
                 );
             }
+        }
+
+        if (!empty($output)) {
+            print $output;
         }
     }
 

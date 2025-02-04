@@ -1,0 +1,139 @@
+{
+    "info": {
+        "_postman_id": "b9d7b2d1-5f0b-4f8f-ae2e-123456789abc",
+        "name": "Fornecedores API",
+        "description": "Coleção de endpoints para o CRUD de Fornecedores, conforme implementado no projeto.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Listar Fornecedores",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/fornecedores",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "fornecedores"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Criar Fornecedor",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nome\": \"Empresa Exemplo LTDA\",\n  \"documento_tipo_id\": 1,\n  \"documento_numero\": \"12345678901234\",\n  \"endereco_id\": 1,\n  \"endereco_numero\": \"100\",\n  \"endereco_complemento\": \"Sala 101\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/fornecedores",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "fornecedores"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Exibir Fornecedor",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/fornecedores/:id",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "fornecedores",
+                        ":id"
+                    ],
+                    "variable": [
+                        {
+                            "key": "id",
+                            "value": "1"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Atualizar Fornecedor",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nome\": \"Empresa Atualizada LTDA\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/fornecedores/:id",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "fornecedores",
+                        ":id"
+                    ],
+                    "variable": [
+                        {
+                            "key": "id",
+                            "value": "1"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Excluir Fornecedor",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/fornecedores/:id",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "fornecedores",
+                        ":id"
+                    ],
+                    "variable": [
+                        {
+                            "key": "id",
+                            "value": "1"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}
